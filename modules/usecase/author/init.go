@@ -1,15 +1,15 @@
 package author
 
-import ap "github.com/fazaalexander/bayarind-case-study.git/modules/repository/author"
+import ar "github.com/fazaalexander/bayarind-case-study.git/modules/repository/author"
 
 type AuthorUseCase interface {
 }
 
 type authorUseCase struct {
-	authorRepo ap.AuthorRepo
+	authorRepo ar.AuthorRepo
 }
 
-func New(authorRepo ap.AuthorRepo) *authorUseCase {
+func New(authorRepo ar.AuthorRepo) *authorUseCase {
 	return &authorUseCase{
 		authorRepo,
 	}
