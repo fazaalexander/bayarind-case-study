@@ -22,7 +22,7 @@ func (ah *AuthorHandler) GetAllAuthor() echo.HandlerFunc {
 		pageSize := 10
 		offset := (page - 1) * pageSize
 
-		authors, total, err := ah.authorHandler.GetAllAuthor(&authors, offset, pageSize)
+		authors, total, err := ah.authorUseCase.GetAllAuthor(&authors, offset, pageSize)
 		if err != nil {
 			return c.JSON(http.StatusNotFound, echo.Map{
 				"Message": err.Error(),
@@ -32,7 +32,7 @@ func (ah *AuthorHandler) GetAllAuthor() echo.HandlerFunc {
 
 		if len(authors) == 0 {
 			return c.JSON(http.StatusNotFound, echo.Map{
-				"Message": err.Error(),
+				"Message": err,
 				"Status":  http.StatusNotFound,
 			})
 		}
@@ -40,7 +40,7 @@ func (ah *AuthorHandler) GetAllAuthor() echo.HandlerFunc {
 		totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
 		if page > totalPages {
 			return c.JSON(http.StatusNotFound, echo.Map{
-				"Message": err.Error(),
+				"Message": err,
 				"Status":  http.StatusNotFound,
 			})
 		}
@@ -70,7 +70,7 @@ func (ah *AuthorHandler) GetAuthorById() echo.HandlerFunc {
 		var author *ae.Author
 		authorID, _ := strconv.ParseUint(c.Param("id"), 10, 64)
 
-		author, err := ah.authorHandler.GetAuthorById(authorID, author)
+		author, err := ah.authorUseCase.GetAuthorById(authorID, author)
 		if err != nil {
 			return c.JSON(http.StatusNotFound, echo.Map{
 				"Message": err.Error(),
@@ -101,7 +101,7 @@ func (ah *AuthorHandler) CreateAuthor() echo.HandlerFunc {
 			})
 		}
 
-		err := ah.authorHandler.CreateAuthor(&author)
+		err := ah.authorUseCase.CreateAuthor(&author)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, echo.Map{
@@ -128,7 +128,7 @@ func (ah *AuthorHandler) UpdateAuthor() echo.HandlerFunc {
 			})
 		}
 
-		err := ah.authorHandler.UpdateAuthor(authorID, &author)
+		err := ah.authorUseCase.UpdateAuthor(authorID, &author)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, echo.Map{
@@ -149,7 +149,7 @@ func (ah *AuthorHandler) DeleteAuthor() echo.HandlerFunc {
 		var author *ae.Author
 		authorID, _ := strconv.ParseUint(c.Param("id"), 10, 64)
 
-		author, err := ah.authorHandler.GetAuthorById(authorID, author)
+		author, err := ah.authorUseCase.GetAuthorById(authorID, author)
 		if err != nil {
 			return c.JSON(http.StatusNotFound, echo.Map{
 				"Message": err.Error(),
@@ -157,7 +157,7 @@ func (ah *AuthorHandler) DeleteAuthor() echo.HandlerFunc {
 			})
 		}
 
-		err = ah.authorHandler.DeleteAuthor(authorID, author)
+		err = ah.authorUseCase.DeleteAuthor(authorID, author)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, echo.Map{
 				"Message": err.Error(),
